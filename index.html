@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"/>
+  <title>양력/음력 수비학 타로 연애성향</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    :root {
+      --primary: #2C3E50;
+      --secondary: #3498DB;
+      --accent: #E74C3C;
+      --bg: #f8f9fb;
+      --light: #ECF0F1;
+      --gray: #95A5A6;
+      --text: #2C3E50;
+    }
+    * {
+      margin: 0; 
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    header {
+      height: 60vh;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('https://via.placeholder.com/1920x1080') center/cover no-repeat;
+      opacity: 0.1;
+      z-index: 1;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 700px;
+      padding: 20px;
+    }
+    .hero-content h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      font-weight: 700;
+    }
+    .hero-content p {
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+      opacity: 0.95;
+    }
+    .hero-btn {
+      display: inline-block;
+      padding: 14px 28px;
+      background: var(--accent);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      border-radius: 50px;
+      transition: all 0.3s ease;
+    }
+    .hero-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 3px 12px rgba(231,76,60,0.3);
+    }
+
+    .form-section {
+      max-width: 700px;
+      margin: -40px auto 40px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      padding: 30px;
+      position: relative;
+      top: -40px;
+    }
+    .form-section h2 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      text-align: center;
+      color: var(--primary);
+    }
+    .desc {
+      font-size: 0.95rem;
+      color: #666;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .calc-form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+    .input-block {
+      background: #fafafa;
+      border: 2px solid var(--secondary);
+      border-radius: 8px;
+      padding: 10px 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .input-block h3 {
+      font-size: 1rem;
+      color: var(--primary);
+    }
+    .input-block label {
+      font-size: 0.85rem;
+      color: var(--primary);
+    }
+    .input-block input {
+      width: 100px;
+      padding: 8px;
+      border: 1px solid var(--gray);
+      border-radius: 6px;
+      font-size: 0.95rem;
+      text-align: center;
+      outline: none;
+    }
+    button#calcBtn {
+      align-self: center;
+      padding: 10px 20px;
+      background: var(--accent);
+      border: none;
+      color: #fff;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      height: 44px;
+    }
+    button#calcBtn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 3px 8px rgba(231,76,60,0.2);
+    }
+
+    .result-area {
+      margin-top: 20px;
+      display: none;
+      background: var(--light);
+      border-radius: 10px;
+      padding: 20px;
+    }
+    .double-result {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+    .double-result h3 {
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+
+    .detail-cards {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+      display: none;
+    }
+    .detail-cards h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: var(--primary);
+      font-size: 1.8rem;
+    }
+    .dynamic-card {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .dynamic-card h3 {
+      color: var(--secondary);
+      margin-bottom: 15px;
+    }
+    .card-section-title {
+      font-weight: bold;
+      margin-top: 10px;
+      margin-bottom: 4px;
+      color: var(--primary);
+    }
+
+    footer {
+      background: var(--primary);
+      color: #fff;
+      text-align: center;
+      padding: 30px 20px;
+    }
+    footer p {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="hero-content">
+    <h1>양력/음력 수비학 타로 연애성향</h1>
+    <p>두 가지 생년월일을 입력하고,<br>나오는 번호(최대4개)의 해설만 확인해보세요.</p>
+    <a href="#calcSection" class="hero-btn">시작하기</a>
+  </div>
+</header>
+
+<section class="form-section" id="calcSection">
+  <h2>양력/음력 사주번호 계산</h2>
+  <p class="desc">
+    양력과 음력 생년월일(연/월/일)을 각각 입력한 뒤,<br>
+    [사주번호 계산] 클릭하면 계산된 번호들의 해설만 아래에 표시됩니다.
+  </p>
+  <div class="calc-form">
+    <!-- 양력 입력 -->
+    <div class="input-block">
+      <h3>양력</h3>
+      <label>연 (YYYY)</label>
+      <input type="number" id="solarYear" placeholder="예) 1990">
+      <label>월 (MM)</label>
+      <input type="number" id="solarMonth" placeholder="1~12">
+      <label>일 (DD)</label>
+      <input type="number" id="solarDay" placeholder="1~31">
+    </div>
+    <!-- 음력 입력 -->
+    <div class="input-block">
+      <h3>음력</h3>
+      <label>연 (YYYY)</label>
+      <input type="number" id="lunarYear" placeholder="예) 1990">
+      <label>월 (MM)</label>
+      <input type="number" id="lunarMonth" placeholder="1~12">
+      <label>일 (DD)</label>
+      <input type="number" id="lunarDay" placeholder="1~31">
+    </div>
+
+    <button id="calcBtn">사주번호 계산</button>
+  </div>
+
+  <!-- 결과영역 -->
+  <div class="result-area" id="resultArea">
+    <div class="double-result">
+      <h3>양력 결과</h3>
+      <p>합산값: <span id="solarTotal"></span></p>
+      <p>메인번호: <span id="solarFV"></span>, 보조번호: <span id="solarSV"></span></p>
+    </div>
+    <div class="double-result">
+      <h3>음력 결과</h3>
+      <p>합산값: <span id="lunarTotal"></span></p>
+      <p>메인번호: <span id="lunarFV"></span>, 보조번호: <span id="lunarSV"></span></p>
+    </div>
+  </div>
+</section>
+
+<!-- 결과 카드 해설(동적) -->
+<section class="detail-cards" id="detailCards">
+  <h2>결과 카드 해설</h2>
+  <div id="cardsContainer"></div>
+</section>
+
+<footer>
+  <p>© 2025 수비학 타로 연애성향 사이트. All rights reserved.</p>
+  <p>문의: <a href="mailto:info@example.com" style="color:#fff;">info@example.com</a></p>
+</footer>
+
+<script>
+  // (1) 자릿수 합
+  function sumDigits(n){
+    let s=0;
+    let str = String(n);
+    for(let i=0; i<str.length; i++){
+      s += parseInt(str[i],10);
+    }
+    return s;
+  }
+
+  // (2) calcSajuValue
+  function calcSajuValue(y,m,d){
+    if(isNaN(y) || isNaN(m) || isNaN(d)) return null;
+    let total = y+m+d;
+    if(total<2000){
+      let str = String(total).padStart(4,'0');
+      let f2 = parseInt(str.substr(0,2),10);
+      let b2 = parseInt(str.substr(2,2),10);
+      let sf = sumDigits(f2);
+      let sb = sumDigits(b2);
+      let fv = sb;
+      let combine = parseInt(String(sf)+String(sb),10);
+      let sv = sumDigits(combine);
+      return { total, firstVal: fv, secondVal: sv };
+    } else {
+      let lastTwo = total % 100;
+      let fv = (lastTwo>21)? (lastTwo % 22) : lastTwo;
+      let sv = sumDigits(total);
+      if(sv>21) sv = sv % 22;
+      return { total, firstVal: fv, secondVal: sv };
+    }
+  }
+
+  // (3) 0~21 모든 카드 데이터
+  const cardData = {
+    0: `
+      <h3>0. The Fool (광대)</h3>
+      <p class="card-section-title">연애성향</p>
+      <p>자유로운 영혼, 즉흥적이며 호기심이 많음. 어린아이 같은 설렘과 모험심 가득.</p>
+      <p class="card-section-title">장점</p>
+      <p>새로운 상황에 잘 적응하고, 관계 초기에 활기와 설렘을 선사.</p>
+      <p class="card-section-title">단점</p>
+      <p>책임감 부족으로 쉽게 관계가 흔들릴 수 있고, 금방 질려하는 인상.</p>
+      <p class="card-section-title">현재 흐름</p>
+      <p>초반은 환상적이나, 진지해지는 시점에서 갈등 가능.</p>
+      <p class="card-section-title">이상적 파트너</p>
+      <p>모험심을 이해해주고, 구속보다는 자유를 허용하는 타입이 어울림.</p>
+      <p class="card-section-title">조언</p>
+      <p>즐거움은 좋지만, 어느 정도 책임감과 장기적 안목도 갖추면 더 좋은 사랑 가능.</p>
+    `,
+    1: `
+      <h3>1. The Magician (마법사)</h3>
+      <p class="card-section-title">연애성향</p>
+      <p>머리가 빠르고 센스 좋아, 상대를 매혹. ‘내가 원하는 방향’으로 관계를 이끌려 함.</p>
+      <p class="card-section-title">장점</p>
+      <p>말솜씨와 아이디어로 연애에 활력을 주며, 문제 해결력도 뛰어남.</p>
+      <p class="card-section-title">단점</p>
+      <p>계산적이거나 자기중심적이라는 인상을 줄 수 있음.</p>
+      <p class="card-section-title">현재 흐름</p>
+      <p>관계에 속도감이 있고, 상반기 중 중요한 선택・결정의 기회가 있을 수 있음.</p>
+      <p class="card-section-title">이상적 파트너</p>
+      <p>호기심이 많고, 본인의 창의력・리더십을 즐겁게 받아줄 사람.</p>
+      <p class="card-section-title">조언</p>
+      <p>연애는 일방 통행이 아님. 상대의 의사・마음을 배려해야 진정한 마법이 완성.</p>
+    `,
+    2: `
+      <h3>2. The High Priestess (여사제)</h3>
+      <p class="card-section-title">연애성향</p>
+      <p>이성적, 차분, 쉽게 마음을 열지 않는 편. 섬세하고 조용히 관계를 지켜봄.</p>
+      <p class="card-section-title">장점</p>
+      <p>사려깊고 차분하게 문제를 해결, 깊은 이해와 안정감.</p>
+      <p class="card-section-title">단점</p>
+      <p>표현이 적어 답답할 수 있음. 소극적으로 비칠 위험.</p>
+      <p class="card-section-title">현재 흐름</p>
+      <p>느리지만 신뢰 쌓는 중. 2024년 중반부터 진지해질 가능성.</p>
+      <p class="card-section-title">이상적 파트너</p>
+      <p>조급하지 않은 사람, 시간을 두고 상대를 이해하는 성향이 맞음.</p>
+      <p class="card-section-title">조언</p>
+      <p>상대에게 마음을 표현하는 노력 필요. 지나치게 ‘침묵’만으로 통하긴 어렵다.</p>
+    `,
+    3: `
+      <h3>3. The Empress (여황제)</h3>
+      <p class="card-section-title">연애성향</p>
+      <p>따뜻하고 풍요로운 에너지를 지향, 안정감과 보살핌을 강조.</p>
+      <p class="card-section-title">장점</p>
+      <p>상대를 감싸 안고, 다정하게 보살피는 능력 뛰어남. 사랑을 풍성히 키움.</p>
+      <p class="card-section-title">단점</p>
+      <p>질투・집착, 과도한 보살핌으로 상대를 숨막히게 할 수 있음.</p>
+      <p class="card-section-title">현재 흐름</p>
+      <p>금전・실리 문제와 연애가 얽힐 수 있음. 결혼・동거 생각이 빨라질 수도.</p>
+      <p class="card-section-title">이상적 파트너</p>
+      <p>가정적이고, 함께 안락한 삶을 꾸리고자 하는 사람.</p>
+      <p class="card-section-title">조언</p>
+      <p>상대에게 주는 만큼, 스스로도 자율・개인 시간을 존중해주어야 좋다.</p>
+    `,
+    4: `
+      <h3>4. The Emperor (황제)</h3>
+      <p class="card-section-title">연애성향</p>
+      <p>주도적이고 책임감 있는 리더십, 안정된 미래 계획을 선호.</p>
+      <p class="card-section-title">장점</p>
+      <p>상대를 보호하고, 현실적 문제(돈・미래 등)를 든든히 해결.</p>
+      <p class="card-section-title">단점</p>
+      <p>권위적・고집 센 모습으로 갈등 발생. 타협 부족 시 어려움.</p>
+      <p class="card-section-title">현재 흐름</p>
+      <p>빠른 속도로 결혼・약혼 등 미래를 구체화하려 할 수 있음.</p>
+      <p class="card-section-title">이상적 파트너</p>
+      <p>리더십을 존중하면서, 의견을 솔직히 내줄 수 있는 사람.</p>
+      <p class="card-section-title">조언</p>
+      <p>연애는 지휘나 명령이 아닌, 상호 합의. 상대 의사 적극적으로 수렴할 것.</p>
+    `,
+    5: `
+      <h3>5. The Hierophant (교황)</h3>
+      <p class="card-section-title">연애성향</p>
+      <p>전통・도덕・가족 등 안정적이고 보수적인 가치관 중시. 평화로운 연애 선호.</p>
+      <p class="card-section-title">장점</p>
+      <p>신뢰・성실. 갈등이 생겨도 온화하게 중재하는 스타일.</p>
+      <p class="card-section-title">단점</p>
+      <p>지루하거나 감정표현 부족하게 보여, 심심하단 평 가능.</p>
+      <p class="card-section-title">현재 흐름</p>
+      <p>점진적 안정 추구, 주변 가족・친지의 의견도 중요한 포인트.</p>
+      <p class="card-section-title">이상적 파트너</p>
+      <p>비슷한 가치관(윤리, 종교, 관습)을 공유하며 차분한 관계를 원하는 사람.</p>
+      <p class="card-section-title">조언</p>
+      <p>적당한 이벤트나 로맨틱함도 필요. 너무 교과서적이면 상대가 싫증낼 우려.</p>
+    `,
+    6: `
+      <h3>6. The Lovers (연인)</h3>
+      <p class="card-section-title">연애성향</p>
+      <p>감정적 교류, 로맨스를 중시. 깊은 감정 교환과 설렘을 원함.</p>
+      <p class="card-section-title">장점</p>
+      <p>매력적이고 정이 많아, 연애 초반 불꽃 튀는 케미 형성에 능숙.</p>
+      <p class="card-section-title">단점</p>
+      <p>우유부단, 감정 기복이 심해 “내가 진짜 좋아하는 게 뭔지” 혼란.</p>
+      <p class="card-section-title">현재 흐름</p>
+      <p>썸・사랑 운이 강력. 하지만 결정적 순간에 갈팡질팡하면 갈등 커짐.</p>
+      <p class="card-section-title">이상적 파트너</p>
+      <p>로맨틱함을 공유하고, 다정한 감정 표현을 좋아하는 유형.</p>
+      <p class="card-section-title">조언</p>
+      <p>상대에게 확신을 주려면 의사결정이 필수. 감정에만 취하지 말고 한 번 더 생각.</p>
+    `,
+    7: `
+      <h3>7. The Chariot (전차)</h3>
+      <p class="card-section-title">연애성향</p>
+      <p>도전적・열정적, 사랑도 “돌격”으로 시작. 문제도 정면으로 맞섬.</p>
+      <p class="card-section-title">장점</p>
+      <p>주저하지 않고 매사 적극적, 어려움도 해결하려는 투지가 강함.</p>
+      <p class="card-section-title">단점</p>
+      <p>자존심・승부욕이 과해, 다툼 시 강대강 충돌로 이어질 수 있음.</p>
+      <p class="card-section-title">현재 흐름</p>
+      <p>새로운 이동 or 변동 속에서 만남・갈등이 생길 수. 빠른 결단이 필요.</p>
+      <p class="card-section-title">이상적 파트너</p>
+      <p>열정을 이해하고, 활발하게 움직이는 연애를 함께 즐길 수 있는 사람.</p>
+      <p class="card-section-title">조언</p>
+      <p>사랑은 경쟁이 아님. 자존심보다 협력을 우선하면 훨씬 더 원활해짐.</p>
+    `,
+    8: `
+      <h3>8. Strength (힘)</h3>
+      <p class="card-section-title">연애성향</p>
+      <p>인내심과 헌신으로 버티고, 어려울수록 서로를 지키려는 의지.</p>
+      <p class="card-section-title">장점</p>
+      <p>끈기・배려가 뛰어나, 난관이 와도 쉽게 깨지지 않는 강인함.</p>
+      <p class="card-section-title">단점</p>
+      <p>필요 이상으로 참다가 폭발할 수 있음. 표현 부족으로 오해 발생.</p>
+      <p class="card-section-title">현재 흐름</p>
+      <p>서서히 애정이 깊어지는 중. 갈등 있어도 묵묵히 해결할 운세.</p>
+      <p class="card-section-title">이상적 파트너</p>
+      <p>함께 인내하고, 감정 표현 부족을 이해해주며, 때로는 솔직함을 이끌어줄 사람.</p>
+      <p class="card-section-title">조언</p>
+      <p>가끔은 “나 힘들어”라고 말하자. 전부 참기만 하면 서로 소통이 안 됨.</p>
+    `,
+    9: `
+      <h3>9. The Hermit (은둔자)</h3>
+      <p class="card-section-title">연애성향</p>
+      <p>내향적・사색적, 신중하게 접근. 쉽게 감정 드러내지 않음.</p>
+      <p class="card-section-title">장점</p>
+      <p>깊은 이해, 정신적 교감. 한 번 마음 열면 충실한 동반자가 됨.</p>
+      <p class="card-section-title">단점</p>
+      <p>소극적이라 상대가 혼자 헛수고하는 기분을 느낄 수. 표현 부족.</p>
+      <p class="card-section-title">현재 흐름</p>
+      <p>더디지만 서서히 신뢰 쌓는 단계. 2024년엔 약간 더 적극적 태도 요구됨.</p>
+      <p class="card-section-title">이상적 파트너</p>
+      <p>강요 없이, 조용한 시간을 존중해주는 사람. 영적・지적 대화 가능하면 최고.</p>
+      <p class="card-section-title">조언</p>
+      <p>상대가 눈치채길 바라는 건 위험. 솔직히 소통할 때 한층 성숙한 사랑이 완성.</p>
+    `,
+    10: `
+      <h3>10. Wheel of Fortune (운명의 수레바퀴)</h3>
+      <p class="card-section-title">연애성향</p>
+      <p>변화・반전이 많고, 우연적 만남에 의존. 즉흥적 선택이 흔함.</p>
+      <p class="card-section-title">장점</p>
+      <p>긍정적이고 운의 흐름을 타서, 예상치 못한 기회로 사랑을 이끌 수 있음.</p>
+      <p class="card-section-title">단점</p>
+      <p>안정성이 부족해, 상대가 불안함을 느낄 수. 책임 회피 성향.</p>
+      <p class="card-section-title">현재 흐름</p>
+      <p>상반기에 반전적 이벤트, 기회가 온다면 적극 잡아볼 만함.</p>
+      <p class="card-section-title">이상적 파트너</p>
+      <p>변화를 즐기고, 즉흥적 일정에도 유연하게 반응하는 성격.</p>
+      <p class="card-section-title">조언</p>
+      <p>운은 잡았으면 지키는 노력도 필요. 무작정 흘려보내지 말라.</p>
+    `,
+    11: `
+      <h3>11. Justice (정의)</h3>
+      <p class="card-section-title">연애성향</p>
+      <p>논리・이성 중시, 공정과 균형을 중요하게 여김. 감정보다 원칙 우선.</p>
+      <p class="card-section-title">장점</p>
+      <p>갈등 시 냉정히 대처, 합리적 해결. 신뢰할 수 있는 성실함.</p>
+      <p class="card-section-title">단점</p>
+      <p>감정 공감 부족, 상대가 “이건 사랑이 아니라 논리 싸움”이라 느낄 수 있음.</p>
+      <p class="card-section-title">현재 흐름</p>
+      <p>균형 잡기 필요. 상반기 중 갈등 시 감정적 공감이 키 포인트.</p>
+      <p class="card-section-title">이상적 파트너</p>
+      <p>이성・감정 조화가 가능하며, 논리적 문제 해결을 좋아하는 사람.</p>
+      <p class="card-section-title">조언</p>
+      <p>사랑은 재판이 아님. 때론 ‘내가 옳다’ 대신 ‘감정도 존중’해야 한다.</p>
+    `,
+    12: `
+      <h3>12. The Hanged Man (매달린 사람)</h3>
+      <p class="card-section-title">연애성향</p>
+      <p>희생・인내가 특징, 상대나 상황에 순응하며 천천히 맞춰가는 타입.</p>
+      <p class="card-section-title">장점</p>
+      <p>불필요한 다툼 없이 참고 견디며, 꾸준히 신뢰 쌓음.</p>
+      <p class="card-section-title">단점</p>
+      <p>너무 수동적, 결단이 없어 정체 상태로 이어질 위험.</p>
+      <p class="card-section-title">현재 흐름</p>
+      <p>멈춰 있는 듯한 관계가 서서히 전환 필요. 2024년 하반기에 선택의 시점 예상.</p>
+      <p class="card-section-title">이상적 파트너</p>
+      <p>주도적이면서도, 본인 희생을 알아주고 끌어줄 사람.</p>
+      <p class="card-section-title">조언</p>
+      <p>희생이 미덕이지만, 자신의 뜻도 명확히 표현해야 한다는 점 잊지 말라.</p>
+    `,
+    13: `
+      <h3>13. Death (죽음)</h3>
+      <p class="card-section-title">연애성향</p>
+      <p>끝과 새 시작, 큰 전환점을 맞이하는 극단적 스타일.</p>
+      <p class="card-section-title">장점</p>
+      <p>결단력 있어, 잘 안 맞는 관계를 과감히 끊고 새 인연 맞이 가능.</p>
+      <p class="card-section-title">단점</p>
+      <p>극단적 이별・파국이 잦을 수. 상대 입장에선 충격이 클 수도.</p>
+      <p class="card-section-title">현재 흐름</p>
+      <p>2024년 초중반 “결정적 변화” 발생. 이별 or 재출발의 갈림길.</p>
+      <p class="card-section-title">이상적 파트너</p>
+      <p>과거 집착 없이, 변화를 긍정적으로 받아들이는 사람.</p>
+      <p class="card-section-title">조언</p>
+      <p>과감히 정리하거나 새로 시작할 땐, 상대와 감정 정리를 명확히 해서 상처 최소화.</p>
+    `,
+    14: `
+      <h3>14. Temperance (절제)</h3>
+      <p class="card-section-title">연애성향</p>
+      <p>중용・절제를 추구, 지나친 극단을 피하고 균형감각을 중요시함.</p>
+      <p class="card-section-title">장점</p>
+      <p>서로 다른 면을 조화롭게 섞어, 평화롭고 안정된 관계를 이어감.</p>
+      <p class="card-section-title">단점</p>
+      <p>자신 주장이나 개성을 잘 드러내지 못해 심심하거나 답답하게 느껴질 수.</p>
+      <p class="card-section-title">현재 흐름</p>
+      <p>잔잔히 진행 중. 하반기 결실 운도 있으나, 표현 부족하면 갈등 누적 가능.</p>
+      <p class="card-section-title">이상적 파트너</p>
+      <p>양보・배려하는 사람이 좋고, 공격적 성향은 피하는 게 안전.</p>
+      <p class="card-section-title">조언</p>
+      <p>균형을 위해서라도 가끔은 솔직히 “이건 싫어!”라고 말하는 게 진정한 절제.</p>
+    `,
+    15: `
+      <h3>15. The Devil (악마)</h3>
+      <p class="card-section-title">연애성향</p>
+      <p>욕망・소유욕・집착 등 강렬한 에너지를 가지고 있음. 매혹적이지만 위험.</p>
+      <p class="card-section-title">장점</p>
+      <p>뜨거운 열정과 유혹으로, 치명적 매력 어필. 관계가 매우 밀도 높을 수.</p>
+      <p class="card-section-title">단점</p>
+      <p>질투·집착이 심해지거나, 숨기는 비밀이 생기면 파국에 이를 수도.</p>
+      <p class="card-section-title">현재 흐름</p>
+      <p>2024년 초반, 강렬한 사랑 or 삼각관계 유혹. 신중히 대처 필요.</p>
+      <p class="card-section-title">이상적 파트너</p>
+      <p>어느 정도 열정적이며, 끊임없는 애정 확인을 부담스럽지 않아 하는 사람.</p>
+      <p class="card-section-title">조언</p>
+      <p>자칫 중독적 관계에 빠지지 않도록 “절제된 열정”을 유지하라.</p>
+    `,
+    16: `
+      <h3>16. The Tower (탑)</h3>
+      <p class="card-section-title">연애성향</p>
+      <p>갑작스럽고 파괴적인 변화를 상징, 충돌·파국이 뒤따를 수 있음.</p>
+      <p class="card-section-title">장점</p>
+      <p>잘못된 구조를 한 번에 부수고, 새로운 시작·깨달음으로 성장 가능.</p>
+      <p class="card-section-title">단점</p>
+      <p>예고 없이 관계가 무너질 위험, 상대에게 큰 충격과 상처.</p>
+      <p class="card-section-title">현재 흐름</p>
+      <p>문제가 누적돼 있었다면 2024년에 폭발. 다만 재건 기회도 함께 주어짐.</p>
+      <p class="card-section-title">이상적 파트너</p>
+      <p>위기를 함께 맞이하고, 무너져도 다시 일어설 의지가 있는 사람.</p>
+      <p class="card-section-title">조언</p>
+      <p>두려워 말고 갈등·문제를 정면 돌파하면, 오히려 ‘더 나은 관계’를 세울 수 있음.</p>
+    `,
+    17: `
+      <h3>17. The Star (별)</h3>
+      <p class="card-section-title">연애성향</p>
+      <p>낭만적, 미래지향적, 사랑에서 희망과 긍정을 찾으려 함.</p>
+      <p class="card-section-title">장점</p>
+      <p>상대에게 희망과 위로를 줘, 관계가 아름다운 판타지로 발전.</p>
+      <p class="card-section-title">단점</p>
+      <p>현실적 문제에서 회피적 태도로 ‘몽상’만 할 위험.</p>
+      <p class="card-section-title">현재 흐름</p>
+      <p>2024년 상반기, 이상적인 만남 운↑. 하지만 하반기에 현실 테스트.</p>
+      <p class="card-section-title">이상적 파트너</p>
+      <p>낭만과 꿈을 공유하고, 일정 부분 현실 대비도 함께 해줄 수 있는 사람.</p>
+      <p class="card-section-title">조언</p>
+      <p>꿈은 유지하되, 구체적 실행도 놓치지 말자. 그래야 별처럼 빛나는 사랑 가능.</p>
+    `,
+    18: `
+      <h3>18. The Moon (달)</h3>
+      <p class="card-section-title">연애성향</p>
+      <p>감수성 풍부, 불안·의심도 많은 편. 은밀하고 몽환적 로맨스.</p>
+      <p class="card-section-title">장점</p>
+      <p>상대의 미세한 감정을 잘 파악, 로맨틱 무드 조성에 능함.</p>
+      <p class="card-section-title">단점</p>
+      <p>불안·망상이 커지면 의심・우울의 늪에 빠질 위험.</p>
+      <p class="card-section-title">현재 흐름</p>
+      <p>2024년 초, 비밀스런 관계나 혼란 갈등 수. 솔직함이 해법.</p>
+      <p class="card-section-title">이상적 파트너</p>
+      <p>감정·상상력을 존중해주고, 때때로 안정을 주는 사람.</p>
+      <p class="card-section-title">조언</p>
+      <p>불안을 혼자 품지 말고 대화로 풀어야 밝은 달빛으로 함께 나아갈 수 있음.</p>
+    `,
+    19: `
+      <h3>19. The Sun (태양)</h3>
+      <p class="card-section-title">연애성향</p>
+      <p>밝고 긍정적, 사랑 자체를 축제처럼 즐김. 낙천적이고 직설적.</p>
+      <p class="card-section-title">장점</p>
+      <p>상대에게 즐거움과 행복감을 전해, 활기찬 관계를 형성.</p>
+      <p class="card-section-title">단점</p>
+      <p>현실 문제를 가볍게 보거나, 지나친 낙관으로 상대가 불안감을 느낄 수도.</p>
+      <p class="card-section-title">현재 흐름</p>
+      <p>여름 무렵 대단히 뜨거운 연애운. 결혼 등 긍정적 결정 가능.</p>
+      <p class="card-section-title">이상적 파트너</p>
+      <p>함께 웃고, 외향적 활동을 즐기며, 긍정 에너지를 나눌 수 있는 사람.</p>
+      <p class="card-section-title">조언</p>
+      <p>밝음은 큰 강점, 다만 상대가 고민할 때 진지한 공감도 제공해야 완벽해진다.</p>
+    `,
+    20: `
+      <h3>20. Judgement (심판)</h3>
+      <p class="card-section-title">연애성향</p>
+      <p>과거 인연・미해결 문제를 다시금 재평가하고 결론을 내리는 흐름.</p>
+      <p class="card-section-title">장점</p>
+      <p>이별・중단됐던 관계도 회복하거나, 확실한 결단으로 미래를 열 수 있음.</p>
+      <p class="card-section-title">단점</p>
+      <p>우물쭈물하며 과거나 미련에 갇히면 기회를 놓칠 수 있음.</p>
+      <p class="card-section-title">현재 흐름</p>
+      <p>재회・과거 애정 재확인 운이 존재. 용서・사과가 핵심.</p>
+      <p class="card-section-title">이상적 파트너</p>
+      <p>과거 트라우마나 실수를 함께 극복하고, 새 출발에 동의하는 사람.</p>
+      <p class="card-section-title">조언</p>
+      <p>늦어도 괜찮다, 지금이라도 진심 표현하면 의미 있는 결과를 얻을 것.</p>
+    `,
+    21: `
+      <h3>21. The World (세계)</h3>
+      <p class="card-section-title">연애성향</p>
+      <p>“완성・통합”을 지향, 관계의 완벽한 조화를 이루고자 함.</p>
+      <p class="card-section-title">장점</p>
+      <p>상대와 조화롭게 어울려, 장기 안정・함께 성장 추구.</p>
+      <p class="card-section-title">단점</p>
+      <p>모든 게 완벽해야 한다는 집착 or 이미 다 이뤘다며 더는 발전하려 안 함.</p>
+      <p class="card-section-title">현재 흐름</p>
+      <p>결실 운. 결혼・동거 등 최종 결합을 고민할 가능성.</p>
+      <p class="card-section-title">이상적 파트너</p>
+      <p>함께 여행・인생 확장 등 다양한 경험하며 “우리 세상”을 만들어갈 사람.</p>
+      <p class="card-section-title">조언</p>
+      <p>완성 후에도 관계는 계속 성장해야 한다. 자만 말고 꾸준히 서로를 돌보라.</p>
+    `
+  };
+
+  // (4) DOM 
+  const solarYear   = document.getElementById('solarYear');
+  const solarMonth  = document.getElementById('solarMonth');
+  const solarDay    = document.getElementById('solarDay');
+
+  const lunarYear   = document.getElementById('lunarYear');
+  const lunarMonth  = document.getElementById('lunarMonth');
+  const lunarDay    = document.getElementById('lunarDay');
+
+  const calcBtn     = document.getElementById('calcBtn');
+  const resultArea  = document.getElementById('resultArea');
+  const detailCards = document.getElementById('detailCards');
+  const cardsDiv    = document.getElementById('cardsContainer');
+
+  const solarTotal  = document.getElementById('solarTotal');
+  const solarFV     = document.getElementById('solarFV');
+  const solarSV     = document.getElementById('solarSV');
+
+  const lunarTotal  = document.getElementById('lunarTotal');
+  const lunarFV     = document.getElementById('lunarFV');
+  const lunarSV     = document.getElementById('lunarSV');
+
+  // (5) 버튼 이벤트
+  calcBtn.addEventListener('click', ()=>{
+    let sy = parseInt(solarYear.value,10);
+    let sm = parseInt(solarMonth.value,10);
+    let sd = parseInt(solarDay.value,10);
+
+    let ly = parseInt(lunarYear.value,10);
+    let lm = parseInt(lunarMonth.value,10);
+    let ld = parseInt(lunarDay.value,10);
+
+    let solarResult = calcSajuValue(sy, sm, sd);
+    let lunarResult = calcSajuValue(ly, lm, ld);
+
+    // 최소 하나라도 유효해야
+    if(!solarResult && !lunarResult){
+      alert('양력/음력 중 최소 하나는 올바르게 입력해주세요!');
+      return;
+    }
+
+    // 결과영역 표시
+    resultArea.style.display = 'block';
+
+    // 양력 표시
+    if(solarResult){
+      solarTotal.textContent = solarResult.total;
+      solarFV.textContent = solarResult.firstVal;
+      solarSV.textContent = solarResult.secondVal;
+    } else {
+      solarTotal.textContent = '---';
+      solarFV.textContent = '---';
+      solarSV.textContent = '---';
+    }
+
+    // 음력 표시
+    if(lunarResult){
+      lunarTotal.textContent = lunarResult.total;
+      lunarFV.textContent = lunarResult.firstVal;
+      lunarSV.textContent = lunarResult.secondVal;
+    } else {
+      lunarTotal.textContent = '---';
+      lunarFV.textContent = '---';
+      lunarSV.textContent = '---';
+    }
+
+    // 번호 배열 (최대4개)
+    let resultNums = [];
+    if(solarResult){
+      resultNums.push(solarResult.firstVal, solarResult.secondVal);
+    }
+    if(lunarResult){
+      resultNums.push(lunarResult.firstVal, lunarResult.secondVal);
+    }
+    // 중복 제거 + 범위
+    let uniqueNums = [...new Set(resultNums)].filter(n=>(n>=0 && n<=21));
+
+    // detail-cards 표시
+    detailCards.style.display = 'block';
+
+    // 기존 해설 초기화
+    cardsDiv.innerHTML = '';
+
+    // 해당 번호만 생성
+    uniqueNums.forEach(num =>{
+      const wrapper = document.createElement('div');
+      wrapper.classList.add('dynamic-card');
+      if(cardData[num]){
+        wrapper.innerHTML = cardData[num];
+      } else {
+        wrapper.innerHTML = `<p>번호 ${num}에 대한 카드데이터가 없습니다.</p>`;
+      }
+      cardsDiv.appendChild(wrapper);
+    });
+  });
+</script>
+</body>
+</html>
